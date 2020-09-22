@@ -39,16 +39,19 @@ public class GenPassMethodOne implements GenPassService {
                 outPass += String.valueOf(simbolsMustHavePass[e]);
                 i++;
             }
-            Pattern pattern1 = Pattern.compile("[a-z]+");
-            Pattern pattern2 = Pattern.compile("[A-Z]+");
-            Pattern pattern3 = Pattern.compile("\\d+");
-            Pattern pattern4 = Pattern.compile("\\W+");
-            Matcher matcher1 = pattern1.matcher(outPass);
-            Matcher matcher2 = pattern2.matcher(outPass);
-            Matcher matcher3 = pattern3.matcher(outPass);
-            Matcher matcher4 = pattern4.matcher(outPass);
+//            Pattern pattern1 = Pattern.compile("[a-z]{1}");
+//            Pattern pattern2 = Pattern.compile("[A-Z]{1}");
+//            Pattern pattern3 = Pattern.compile("\\d{1,}");
+//            Pattern pattern4 = Pattern.compile("\\W{1,}");
+//            Matcher matcher1 = pattern1.matcher(outPass);
+//            Matcher matcher2 = pattern2.matcher(outPass);
+//            Matcher matcher3 = pattern3.matcher(outPass);
+//            Matcher matcher4 = pattern4.matcher(outPass);
+            Pattern pattern = Pattern.compile("(?=.*[0-9])(?=.*[@#$%&])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z@#$%&]{8,}");
+            Matcher matcher = pattern.matcher(outPass);
 
-            if (matcher1.find() && matcher2.find() && matcher3.find() && matcher4.find()) isfound = true;
+//            if (matcher1.find() && matcher2.find() && matcher3.find() && matcher4.find()) isfound = true;
+            if (matcher.matches()) isfound = true;
         }
 
         return outPass;
