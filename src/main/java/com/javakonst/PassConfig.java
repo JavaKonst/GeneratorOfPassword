@@ -3,7 +3,6 @@ package com.javakonst;
 public class PassConfig {
     private int quantityWords;
     private int quantityPass;
-    private char[] simbolsMustHavePass;
     private String digits;
     private String letters;
     private String specLetters;
@@ -13,14 +12,13 @@ public class PassConfig {
         quantityPass = 1;
         digits = "0123456789";
         letters = "abcdefghijklmnoprstuvxyzABCDEFGHIJKLMNOPRSTUVXYZ";
-        specLetters = "";
-        simbolsMustHavePass = (digits + letters + specLetters).toCharArray();
+        specLetters = "@#$%&";
     }
 
     public PassConfig(int quantityWords, int quantityPass){
         this();
-        if (quantityWords >0) this.quantityWords = quantityWords;
-        if (quantityPass >0) this.quantityPass = quantityPass;
+        if (quantityWords > 0) this.quantityWords = quantityWords;
+        if (quantityPass > 0) this.quantityPass = quantityPass;
     }
 
     public int getQuantityWords() {
@@ -39,12 +37,8 @@ public class PassConfig {
         if (quantityPass >0) this.quantityPass = quantityPass;
     }
 
-    public char[] getSimbolsMustHavePass() {
-        return simbolsMustHavePass;
-    }
-
-    public void setSimbolsMustHavePass(char[] simbolsMustHavePass) {
-        if (simbolsMustHavePass!=null && simbolsMustHavePass.length >1) this.simbolsMustHavePass = simbolsMustHavePass;
+    public char[] getAlphabet() {
+        return (digits + letters + specLetters).toCharArray();
     }
 
     public String getDigits() {
@@ -69,5 +63,40 @@ public class PassConfig {
 
     public void setSpecLetters(String specLetters) {
         this.specLetters = specLetters;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PassConfig that = (PassConfig) o;
+
+        if (quantityWords != that.quantityWords) return false;
+        if (quantityPass != that.quantityPass) return false;
+        if (!digits.equals(that.digits)) return false;
+        if (!letters.equals(that.letters)) return false;
+        return specLetters.equals(that.specLetters);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = quantityWords;
+        result = 31 * result + quantityPass;
+        result = 31 * result + digits.hashCode();
+        result = 31 * result + letters.hashCode();
+        result = 31 * result + specLetters.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "PassConfig{" +
+                "quantityWords=" + quantityWords +
+                ", quantityPass=" + quantityPass +
+                ", digits='" + digits + '\'' +
+                ", letters='" + letters + '\'' +
+                ", specLetters='" + specLetters + '\'' +
+                '}';
     }
 }

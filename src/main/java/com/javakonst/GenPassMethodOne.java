@@ -5,11 +5,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GenPassMethodOne implements GenPassService {
-    PassConfig passConfig;
+    private PassConfig passConfig;
 
     @Override
     public void setConfigPassGenerator(PassConfig passConfig){
         this.passConfig = passConfig;
+    }
+
+    public PassConfig getPassConfig() {
+        return passConfig;
     }
 
     @Override
@@ -17,7 +21,7 @@ public class GenPassMethodOne implements GenPassService {
         Set<String> passwordList = new HashSet<>();
 
         for (int i = 0; i < passConfig.getQuantityPass(); i++) {
-            passwordList.add(this.getSinglePass());
+            if (!passwordList.add(this.getSinglePass())) i--;
         }
 
         return passwordList;
@@ -27,7 +31,7 @@ public class GenPassMethodOne implements GenPassService {
     public String getSinglePass (){
         Random random = new Random();
 
-        char[] simbolsMustHavePass = (passConfig.getDigits()+passConfig.getLetters()+passConfig.getSpecLetters()).toCharArray();
+        char[] alphabet = passConfig.getAlphabet();
         int quantityWords = passConfig.getQuantityWords();
 
         String outPass = "";
@@ -35,28 +39,20 @@ public class GenPassMethodOne implements GenPassService {
         while(!isfound){
             outPass = "";
             for (int i = 0; i < quantityWords;) {
-                int e = random.nextInt(simbolsMustHavePass.length);
-                outPass += String.valueOf(simbolsMustHavePass[e]);
+                int e = random.nextInt(alphabet.length);
+                outPass += String.valueOf(alphabet[e]);
                 i++;
             }
-//            Pattern pattern1 = Pattern.compile("[a-z]{1}");
-//            Pattern pattern2 = Pattern.compile("[A-Z]{1}");
-//            Pattern pattern3 = Pattern.compile("\\d{1,}");
-//            Pattern pattern4 = Pattern.compile("\\W{1,}");
-//            Matcher matcher1 = pattern1.matcher(outPass);
-//            Matcher matcher2 = pattern2.matcher(outPass);
-//            Matcher matcher3 = pattern3.matcher(outPass);
-//            Matcher matcher4 = pattern4.matcher(outPass);
             Pattern pattern = Pattern.compile("(?=.*[0-9])(?=.*[@#$%&])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z@#$%&]{8,}");
             Matcher matcher = pattern.matcher(outPass);
 
-//            if (matcher1.find() && matcher2.find() && matcher3.find() && matcher4.find()) isfound = true;
             if (matcher.matches()) isfound = true;
         }
 
         return outPass;
     }
 
+    //наглядное отображение (гистограмма) алгоритма получения случайнного числа то 0 до 9
     public static void showRandomRow(){
         Random random = new Random();
 
